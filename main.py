@@ -1,10 +1,11 @@
-
 import os
 import openai
 import gradio as gr
 
+# Установка API-ключа из переменной окружения
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+# Генерация поста по теме
 def generate_post(topic):
     prompt = f"Напиши пост для Telegram-блога на тему: {topic}. Структура: заголовок, краткий подзаголовок, основной текст. Используй неформальный тон и реальные примеры."
     try:
@@ -21,6 +22,7 @@ def generate_post(topic):
     except Exception as e:
         return f"Ошибка: {e}"
 
+# Интерфейс Gradio
 iface = gr.Interface(
     fn=generate_post,
     inputs=gr.Textbox(label="Тема поста"),
@@ -29,5 +31,11 @@ iface = gr.Interface(
     description="Введите тему — получите пост, готовый к публикации."
 )
 
+# Запуск для Render
 if __name__ == "__main__":
-    iface.launch()
+    port = int(os.environ.get("PORT", 10000))
+    iface.launch(server_name="0.0.0.0", server_port=port)
+
+
+
+
